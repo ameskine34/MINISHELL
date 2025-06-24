@@ -6,7 +6,7 @@
 /*   By: ameskine <ameskine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 18:04:34 by ameskine          #+#    #+#             */
-/*   Updated: 2025/06/22 22:59:29 by ameskine         ###   ########.fr       */
+/*   Updated: 2025/06/23 17:16:48 by ameskine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int ft_strcmp(char *s1, char *s2);
 t_list *ft_new_node(void *content);
 t_list *ft_last(t_list *lst);
 void ft_add_back(t_list **lst, t_list *new);
-void is_built_in(t_list *lst, t_env *lst1);
+void is_built_in(t_list *lst, t_list **lst1);
 char *ft_strdup(char *s);
 int ft_strlen(char *s);
 char *ft_strjoin(char *s1, char *s2);
@@ -67,11 +67,11 @@ int ft_strchr(char *str, char s);
 int ft_strncmp(char *s1, char *s2, int n);
 int ft_lst_size(t_list *lst);
 void ft_pwd(void);
-void ft_cd(t_list *lst, t_env *lst1);
-void pwd_changes(t_env *lst1, char *current, char *new);
+void ft_cd(t_list *lst, t_list *lst1);
+void pwd_changes(t_list *envi, char *current, char *new);
 void ft_exit(t_list *lst);
 long ft_atoi(char *str, int *error);
-void ft_echo(t_list *lst, t_env *lst1);
+void ft_echo(t_list *lst);
 int	ft_putstr(char *s);
 int	ft_putchar(unsigned char c);
 int	ft_check_f(char c, va_list list);

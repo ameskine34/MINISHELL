@@ -6,7 +6,7 @@
 /*   By: ameskine <ameskine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 18:19:11 by ameskine          #+#    #+#             */
-/*   Updated: 2025/06/22 22:25:11 by ameskine         ###   ########.fr       */
+/*   Updated: 2025/06/24 07:25:00 by ameskine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@ int ft_strlen(char *s)
     int i;
 
     i = 0;
+	if (!s)
+		return (0);
     while (s[i])
         i++;
     return (i);
@@ -62,6 +64,8 @@ int	ft_strcmp(char *s1, char *s2)
 	int	i;
 
 	i = 0;
+	if (!s1 || !s2)
+		return (0);
 	while (s1[i] && s2[i] && (s1[i] == s2[i]))
 		i++;
 	return (s1[i] - s2[i]);
@@ -72,6 +76,8 @@ char    *ft_strdup(char *s)
         size_t  i;
         char    *dup;
 
+		if (!s)
+			return (NULL);
         dup = (char *)malloc(ft_strlen(s) + 1 * sizeof(char));
         if (!dup)
                 return (NULL);

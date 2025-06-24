@@ -6,7 +6,7 @@
 /*   By: ameskine <ameskine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 15:49:03 by ameskine          #+#    #+#             */
-/*   Updated: 2025/06/22 22:42:11 by ameskine         ###   ########.fr       */
+/*   Updated: 2025/06/23 16:13:04 by ameskine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ char    *get_key(char *env)
             break;
         i++;
     }
+    i++;
     key = ft_substr(env, 0, i);
     return (key);
 }
