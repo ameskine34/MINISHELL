@@ -15,30 +15,27 @@
 
 int main()
 {
-    printf("%s", getcwd(NULL, 0));
-}
+    int fd[2];
+    int status;
+    int i = 0;
+    int pid = 0;
+    char *args[] = {"ls", "-a", NULL};
 
-void sort(t_list *envi)
-{
-    char *temp;
-    int i;
-    int j;
-    t_list *lst;
-
-    lst = envi;
-    envi = envi->next;
-    while (((t_env *)envi->content)->key)
+    pipe(fd);
+    pid = fork();
+    if (pid == 0)
     {
-        while (((t_env *)envi->next->content)->key)
+        i = execve("/usr/bin/ls", args, NULL);
+        if (i == -1)
         {
-            if (ft_strcmp(((t_env *)envi->content)->key, ((t_env *)envi->next->content)->key > 0)
-            {
-               temp =  ((t_env *)envi)->content[i];
-               (t_env *)envi)->content[i] = ((t_env *)envi)->content[j];
-               ((t_env *)envi)->content[j] = temp;
-            }
-            j++;
+            printf("ERROR\n");
         }
-        i++;
     }
+    else
+    {
+        printf("sjfks\n");
+    }
+    waitpid(-1, &status, 0);
+    int j = WEXITSTATUS(status);
+    printf("this the exit status : %d\n", j);
 }

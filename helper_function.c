@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   helper_function.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ameskine <ameskine@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ameskine <ameskine@student.1337.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 18:19:11 by ameskine          #+#    #+#             */
-/*   Updated: 2025/06/24 07:25:00 by ameskine         ###   ########.fr       */
+/*   Updated: 2025/07/03 22:46:37 by ameskine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,7 @@ int  ft_lst_size(t_list *lst)
         lst = lst->next;
         i++;
     }
-    return (i);
+    return (i - 1);
 }
 
 void    ft_add_back(t_list **lst, t_list *new)
@@ -225,4 +225,124 @@ char	*ft_substr(char *s, unsigned int start, size_t len)
 	}
 	substr[i] = '\0';
 	return (substr);
+}
+
+static t_bool	ft_issep(char s, char c)
+{
+	return (s == c || s == '\0');
+}
+
+static size_t	word_c(char *s, char c)
+{
+	size_t	i;
+	size_t	count;
+
+	i = 0;
+	count = 0;
+	while (s[i])
+	{
+		if (!ft_issep(s[i], c) && ft_issep(s[i + 1], c))
+			count++;
+		i++;
+	}
+	return (count);
+}
+
+static void	freemem(char **split, size_t i)
+{
+	while (i--)
+	{
+		free(split[i]);
+	}
+	free(split);
+}
+
+static	t_bool	ft_fill(char **split, char *s, char sep)
+{
+	size_t	i;
+	size_t	pos;
+	size_t	count;
+
+	i = 0;
+	pos = 0;
+	count = 0;
+	while (s[i])
+	{
+		if (!ft_issep(s[i], sep) && ft_issep(s[i + 1], sep))
+		{
+			split[pos] = ft_substr(s, i - count, count + 1);
+			if (!split[pos++])
+				return (freemem(split, pos - 1), FALSE);
+			count = -1;
+		}
+		if (!ft_issep(s[i], sep))
+			count++;
+		i++;
+	}
+	split[pos] = NULL;
+	return (TRUE);
+}
+
+char	**ft_split(char *s, char c)
+{
+	char	**split;
+
+	if (!s)
+		return (NULL);
+	split = (char **)malloc((word_c(s, c) + 1) * sizeof(char *));
+	if (!split || !ft_fill(split, s, c))
+		return (NULL);
+	return (split);
+}
+
+char	*ft_str_tree_cat(char *dst, char *s1, char *s2, char *s3)
+{
+	size_t	i;
+
+	i = 0;
+	while (*s1)
+	{
+		dst[i] = *s1;
+		i++;
+		s1++;
+	}
+	while (*s2)
+	{
+		dst[i] = *s2;
+		i++;
+		s2++;
+	}
+	while (*s3)
+	{
+		dst[i] = *s3;
+		i++;
+		s3++;
+	}
+	dst[i] = '\0';
+	return (dst);
+}
+
+char	*ft_str_tree_join(char  *s1, char  *s2, char *s3)
+{
+	char	*join;
+
+	if (!s1 || !s2 || !s3)
+		return (NULL);
+	join = (char *)malloc((ft_strlen(s1) + ft_strlen(s2) +ft_strlen(s3) + 1) * sizeof(char));
+	if (!join)
+		return (NULL);
+	join = ft_str_tree_cat(join, s1, s2, s3);
+	return (join);
+}
+void	*ft_memset(void *s, int c, size_t n)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < n)
+	{
+		((unsigned char *)s)[i] = c;
+		i++;
+	}
+	return (s);
 }

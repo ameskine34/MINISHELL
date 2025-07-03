@@ -3,15 +3,33 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ameskine <ameskine@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ameskine <ameskine@student.1337.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 18:04:34 by ameskine          #+#    #+#             */
-/*   Updated: 2025/06/23 17:16:48 by ameskine         ###   ########.fr       */
+/*   Updated: 2025/07/03 22:49:58 by ameskine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 #define MINISHELL_H
+
+typedef enum s_token_type
+{
+	TOKEN_PIPE = 1,
+	TOKEN_OUT_REDIRECTION_OVERWRITE,
+	TOKEN_OUT_REDIRECTION_APPEND,
+	TOKEN_IN_REDIRECTION,
+	TOKEN_HEREDOC,
+	TOKEN_FILE,
+	TOKEN_COMMAND,
+	TOKEN_ARGUMENT,
+}					t_token_type;
+
+typedef enum t_bool
+{
+	FALSE,
+	TRUE
+}	t_bool;
 
 typedef struct s_list
 {
@@ -19,11 +37,31 @@ typedef struct s_list
    struct s_list *next;
 } t_list;
 
+typedef struct s_cmd
+{
+	t_token_type	type;
+	char			*content;
+	int				index;
+	char			**arr_content;
+}					t_cmd;
+
+typedef struct s_node_infos
+{
+	int				shell_level;
+	int				exit_status;
+	int				**pipes;
+	int				index;
+	int				num_of_pipes;
+	t_list			*data;
+	int				num_of_processes;
+}					t_node_infos;
+
 typedef struct s_env
 {
 	char			*key;
 	char			*value;
 }					t_env;
+
 
 //  typedef struct s_list1
 //  {
@@ -81,5 +119,9 @@ void sort(t_env *lst1);
 void    set_envi(t_list **envi, char *env);
 char	*ft_substr(char *s, unsigned int start, size_t len);
 char    *get_key(char *env);
+char	*ft_str_tree_join(char  *s1, char  *s2, char *s3);
+char	*ft_str_tree_cat(char *dst, char *s1, char *s2, char *s3);
+void	*ft_memset(void *s, int c, size_t n);
+void    execution_phase(t_list *data, t_list *env);
 
 #endif

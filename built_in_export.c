@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_in_export.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ameskine <ameskine@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ameskine <ameskine@student.1337.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 12:05:03 by ameskine          #+#    #+#             */
-/*   Updated: 2025/06/24 17:27:27 by ameskine         ###   ########.fr       */
+/*   Updated: 2025/06/25 09:31:05 by ameskine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,29 +15,31 @@
 void    list_to_arr()
 {}
 
-void sort(t_list *lst1)
-{
-    char *temp;
-    int i;
-    int j;
+// void sort(t_list *lst1)
+// {
+//     char *temp;
+//     int i;
+//     int j;
 
-    i = 0;
-    while (lst1->my_env[i])
-    {
-        j = i + 1;
-        while (lst1->my_env[j])
-        {
-            if (ft_strcmp(lst1->my_env[i], lst1->my_env[j]) > 0)
-            {
-               temp =  lst1->my_env[i];
-               lst1->my_env[i] = lst1->my_env[j];
-               lst1->my_env[j] = temp;
-            }
-            j++;
-        }
-        i++;
-    }
-}
+//     i = 0;
+//     while (lst1->my_env[i])
+//     {
+//         j = i + 1;
+//         while (lst1->my_env[j])
+//         {
+//             if (ft_strcmp(lst1->my_env[i], lst1->my_env[j]) > 0)
+//             {
+//                temp =  lst1->my_env[i];
+//                lst1->my_env[i] = lst1->my_env[j];
+//                lst1->my_env[j] = temp;
+//             }
+//             j++;
+//         }
+//         i++;
+//     }
+// }
+
+void    sort_list()
 
 // t_n    *after_equal(t_n *lst)
 // {
@@ -86,11 +88,11 @@ void	equel_implementation(t_n *lst1)
     }
 }
 
-void    ft_export(t_n *lst1)
+void    ft_export(t_list *envi)
 {
-    // int i;
+    int i;
 
-    // i = ft_lst_size(lst);
+    i = ft_lst_size(lst);
     sort(lst1);
     equel_implementation(lst1);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_in_exit.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ameskine <ameskine@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ameskine <ameskine@student.1337.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:42:07 by ameskine          #+#    #+#             */
-/*   Updated: 2025/06/24 12:03:40 by ameskine         ###   ########.fr       */
+/*   Updated: 2025/06/25 09:34:43 by ameskine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ void ft_exit(t_list *lst)
 	int j;
 	int error;
 
-	j = ft_lst_size(lst) - 1;
+	j = ft_lst_size(lst);
 	long n;
 	// if (j == 1)
 	// {

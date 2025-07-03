@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_in_cd.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ameskine <ameskine@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ameskine <ameskine@student.1337.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 11:23:48 by ameskine          #+#    #+#             */
-/*   Updated: 2025/06/23 19:28:20 by ameskine         ###   ########.fr       */
+/*   Updated: 2025/07/03 22:42:16 by ameskine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,6 @@ void    ft_cd(t_list *lst, t_list *envi)
     else if (k > 2)
     {
         ft_printf("bash: cd: too many arguments");
-        exit(1);//i have to return till running the minishell again 
+        exit(1); //i have to return till running the minishell again 
     }
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   set_envi.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ameskine <ameskine@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ameskine <ameskine@student.1337.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 15:49:03 by ameskine          #+#    #+#             */
-/*   Updated: 2025/06/23 16:13:04 by ameskine         ###   ########.fr       */
+/*   Updated: 2025/06/25 09:42:28 by ameskine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ char    *get_key(char *env)
             break;
         i++;
     }
-    i++;
     key = ft_substr(env, 0, i);
     return (key);
 }
@@ -38,7 +37,7 @@ char *get_value(char *env)
         i++;
     }
     i++;
-    value = ft_substr(env, i, ft_strlen(env));
+    value = ft_substr(env, i, ft_strlen(env) - i);
     return (value);
 }
 
