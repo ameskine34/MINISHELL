@@ -6,7 +6,7 @@
 /*   By: ameskine <ameskine@student.1337.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 18:04:34 by ameskine          #+#    #+#             */
-/*   Updated: 2025/07/03 22:49:58 by ameskine         ###   ########.fr       */
+/*   Updated: 2025/07/08 21:08:50 by ameskine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,11 +91,14 @@ typedef struct s_env
 #include <errno.h>
 #include <limits.h>
 # include <stdarg.h>
+#include <readline/readline.h>
+#include <readline/history.h>
 #include <fcntl.h> //if you don t use it remove it
 
 int ft_strcmp(char *s1, char *s2);
 t_list *ft_new_node(void *content);
 t_list *ft_last(t_list *lst);
+void    execution_phase(t_list *data, t_list *env);
 void ft_add_back(t_list **lst, t_list *new);
 void is_built_in(t_list *lst, t_list **lst1);
 char *ft_strdup(char *s);
@@ -114,7 +117,7 @@ int	ft_putstr(char *s);
 int	ft_putchar(unsigned char c);
 int	ft_check_f(char c, va_list list);
 int	ft_printf(const char *s, ...);
-void    ft_export(t_list *lst, t_env *lst1);
+void    ft_export(t_list *lst, t_list *lst1);
 void sort(t_env *lst1);
 void    set_envi(t_list **envi, char *env);
 char	*ft_substr(char *s, unsigned int start, size_t len);
@@ -122,6 +125,12 @@ char    *get_key(char *env);
 char	*ft_str_tree_join(char  *s1, char  *s2, char *s3);
 char	*ft_str_tree_cat(char *dst, char *s1, char *s2, char *s3);
 void	*ft_memset(void *s, int c, size_t n);
-void    execution_phase(t_list *data, t_list *env);
+char    **from_env_to_arr(t_list *env);
+char	*ft_strchr1(char *str, int c);
+t_env   *init_env(char *key, char *value);
+void    ft_env(t_list *envi);
+char	**ft_split(char *s, char c);
+void	ft_lst_clear(t_list **lst, void (*del)(void *));
+void free_env_node(void *content);
 
 #endif

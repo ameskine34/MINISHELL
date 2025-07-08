@@ -6,7 +6,7 @@
 /*   By: ameskine <ameskine@student.1337.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 18:19:11 by ameskine          #+#    #+#             */
-/*   Updated: 2025/07/03 22:46:37 by ameskine         ###   ########.fr       */
+/*   Updated: 2025/07/08 21:07:48 by ameskine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,20 @@ int ft_strchr(char *str, char s)
     return (0);
 }
 
+char *ft_strchr1(char *str, int c)
+{
+    int i;
+
+    i = 0;
+    while (str[i])
+    {
+        if (str[i] == c)
+            return (&str[i]);
+        i++;
+    }
+    return (NULL);
+}
+
 t_list  *ft_new_node(void *content)
 {
     t_list  *node;
@@ -136,7 +150,7 @@ int  ft_lst_size(t_list *lst)
         lst = lst->next;
         i++;
     }
-    return (i - 1);
+    return (i);
 }
 
 void    ft_add_back(t_list **lst, t_list *new)
@@ -295,45 +309,45 @@ char	**ft_split(char *s, char c)
 	return (split);
 }
 
-char	*ft_str_tree_cat(char *dst, char *s1, char *s2, char *s3)
-{
-	size_t	i;
+// char	*ft_str_tree_cat(char *dst, char *s1, char *s2, char *s3)
+// {
+// 	size_t	i;
 
-	i = 0;
-	while (*s1)
-	{
-		dst[i] = *s1;
-		i++;
-		s1++;
-	}
-	while (*s2)
-	{
-		dst[i] = *s2;
-		i++;
-		s2++;
-	}
-	while (*s3)
-	{
-		dst[i] = *s3;
-		i++;
-		s3++;
-	}
-	dst[i] = '\0';
-	return (dst);
-}
+// 	i = 0;
+// 	while (*s1)
+// 	{
+// 		dst[i] = *s1;
+// 		i++;
+// 		s1++;
+// 	}
+// 	while (*s2)
+// 	{
+// 		dst[i] = *s2;
+// 		i++;
+// 		s2++;
+// 	}
+// 	while (*s3)
+// 	{
+// 		dst[i] = *s3;
+// 		i++;
+// 		s3++;
+// 	}
+// 	dst[i] = '\0';
+// 	return (dst);
+// }
 
-char	*ft_str_tree_join(char  *s1, char  *s2, char *s3)
-{
-	char	*join;
+// char	*ft_str_tree_join(char  *s1, char  *s2, char *s3)
+// {
+// 	char	*join;
 
-	if (!s1 || !s2 || !s3)
-		return (NULL);
-	join = (char *)malloc((ft_strlen(s1) + ft_strlen(s2) +ft_strlen(s3) + 1) * sizeof(char));
-	if (!join)
-		return (NULL);
-	join = ft_str_tree_cat(join, s1, s2, s3);
-	return (join);
-}
+// 	if (!s1 || !s2 || !s3)
+// 		return (NULL);
+// 	join = (char *)malloc((ft_strlen(s1) + ft_strlen(s2) +ft_strlen(s3) + 1) * sizeof(char));
+// 	if (!join)
+// 		return (NULL);
+// 	join = ft_str_tree_cat(join, s1, s2, s3);
+// 	return (join);
+// }
 void	*ft_memset(void *s, int c, size_t n)
 {
 	size_t	i;
@@ -345,4 +359,48 @@ void	*ft_memset(void *s, int c, size_t n)
 		i++;
 	}
 	return (s);
+}
+
+// char    **from_env_to_arr(t_list *env)
+// {
+//     char **arr_env;
+//     int i;
+
+//     i = 0;
+//     while (env)
+//     {
+//         arr_env[i] = ft_str_tree_join(((t_env *)env->content)->key, "=" ,((t_env *)env->content)->value);
+//         env = env->next;
+//         i++;
+//     }
+//     return (arr_env);
+// }
+
+void	ft_lst_clear(t_list **lst, void (*del)(void *))
+{
+	t_list *current;
+	t_list *next;
+
+	if (!lst || !del)
+		return ;
+	current = *lst;
+	while (current)
+	{
+		next = current->next;
+		del(current->content);
+		free(current);
+		current = next;
+	}
+	*lst = NULL;
+}
+
+void free_env_node(void *content)
+{
+    t_env *env_node = (t_env *)content;
+    if (env_node)
+    {
+        free(env_node->key);
+        free(env_node->value);
+        free(env_node);
+    }
 }

@@ -6,7 +6,7 @@
 /*   By: ameskine <ameskine@student.1337.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:42:07 by ameskine          #+#    #+#             */
-/*   Updated: 2025/06/25 09:34:43 by ameskine         ###   ########.fr       */
+/*   Updated: 2025/07/08 21:41:09 by ameskine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ int get_sign(char *str, int *i)
 	return (sign);
 }
 
-
 void skip_whitespace(char *str, int *i)
 {
 	while ((str[*i] >= 9 && str[*i] <= 13) || str[*i] == 32)
@@ -61,9 +60,9 @@ long ft_atoi(char *str, int *error)
 		{
 			if (num_len(res) == 18)
 			{
-				if (sign == 1 && (str[i] > '7' || str[i + 1] != '\0'))
+				if (sign == 1 && sign == 1 && (res > (LLONG_MAX - (str[i] - '0')) / 10))
 					*error = 1;
-				else if (sign == -1 && (str[i] > '8' || str[i + 1] != '\0'))
+				else if (sign == -1 && sign == 1 && (res > (LLONG_MIN + (str[i] - '0')) / 10))
 					*error = 1;
 			}
 			res = res * 10 + (str[i] - '0');
@@ -75,55 +74,32 @@ long ft_atoi(char *str, int *error)
 	return ((res * sign));
 }
 
-int ft_check_valid(char *s)
+void ft_exit(t_list *lst) //overall i need to hold the exit value (void ft_exit(t_list *lst, int last_exit_status))
 {
-	int i;
-
-	i = 0;
-	while (s[i])
-	{
-		if ((s[i] < '0' || s[i] > '9') && (s[i] != '-' && s[i] != '+'))
-			return (0);
-		i++;
-	}
-	return (1);
-}
-
-void ft_exit(t_list *lst)
-{
-	int j;
 	int error;
+	long n;
+	int j;
 
 	j = ft_lst_size(lst);
-	long n;
-	// if (j == 1)
-	// {
-	// 	exit();//i need to take the value of the last exit code
-	// }
-	if (j > 1 && !ft_check_valid(lst->next->content))
+	printf("%s", "exit\n");
+	if (j == 1)
 	{
-		ft_printf("%s\n", "exit");
-		ft_printf("%s", "bash: exit: ");
-		ft_printf("%s", lst->next->content);
-		ft_printf("%s", ": numeric argument required");
-		exit(2);
+		exit(1);//i need to take the value of the last exit code
 	}
-	else if (j > 2)
-	{
-		ft_printf("%s\n", "exit");
-		ft_printf("%s", "bash: exit: too many arguments");
-		exit(1);
-	}
-	else
+	else if (j > 1)
 	{
 		n = ft_atoi((lst->next->content), &error);
 		if (error == 1)
 		{
-			ft_printf("%s\n", "exit");
 			ft_printf("%s", "bash: exit: ");
 			ft_printf("%s", lst->next->content);
-			ft_printf("%s", ": numeric argument required");
+			ft_printf("%s", ": numeric argument required\n");
 			exit(2);
+		}
+		else if (j > 2)
+		{
+			ft_printf("%s", "bash: exit: too many arguments\n");
+			exit(1);
 		}
 		else
 			exit(n);

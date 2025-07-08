@@ -6,31 +6,11 @@
 /*   By: ameskine <ameskine@student.1337.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 18:03:06 by ameskine          #+#    #+#             */
-/*   Updated: 2025/07/03 22:50:59 by ameskine         ###   ########.fr       */
+/*   Updated: 2025/07/08 21:09:39 by ameskine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void is_built_in(t_list *lst, t_list **lst1)
-{
-    if (!ft_strcmp(lst->content, "cd"))
-        ft_cd(lst, *lst1);
-    else if (!ft_strcmp(lst->content, "pwd"))
-        ft_pwd();
-    // else if (!ft_strcmp(lst->content, "export"))
-    //     ft_export(lst, lst1);
-    else if (!ft_strcmp(lst->content, "echo"))
-        ft_echo(lst);
-    // else if (ft_strcmp(lst->content, "unset"))
-    //     ft_unset();
-    // else if (ft_strcmp(lst->content, "env"))
-    //     ft_env(*lst1);
-    else if (!ft_strcmp(lst->content, "exit"))
-        ft_exit(lst);
-    else
-        return ;
-}
 
 // int main(int ac, char **av, char **env)
 // {
@@ -65,21 +45,48 @@ void is_built_in(t_list *lst, t_list **lst1)
 // }
 int main(int ac, char **av, char **env)
 {
-    t_list *lst1;
-    t_list *lst;
+    t_list *lst1 = NULL;
+    t_list *lst = NULL;
+    char **cmd_args;
+    char *line;
     int i;
 
+    (void)ac;
+    (void)av;
     i = 0;
     while (env[i])
     {
         set_envi(&lst1, env[i]);
         i++;
     }
-    i = 0;
-    while (i < ac)
+    while (1)
     {
-        ft_add_back(&lst, ft_new_node(ft_strdup(av[i+1])));
-        i++;
+        line = readline("minishell> ");
+        if (!line)
+            break ;
+        if (ft_strlen(line) > 0)
+            add_history(line);
+        cmd_args = ft_split(line, ' ');
+        if (!cmd_args)
+        {
+            ft_printf("%s", "Error\n");
+            free(line);
+            continue;
+        }
+        i = 0;
+        while (cmd_args[i])
+        {
+            ft_add_back(&lst, ft_new_node(ft_strdup(cmd_args[i])));
+            free(cmd_args[i]);
+            i++;
+        }
+        free(cmd_args);
+        if (lst && lst->content)
+        {
+            execution_phase(lst, lst1);
+        }
+        ft_lst_clear(&lst, free);
+        free(line);
     }
-    execution_phase(lst, lst1);
+    ft_lst_clear(&lst1, free_env_node);
 }

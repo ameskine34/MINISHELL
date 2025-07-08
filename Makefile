@@ -6,26 +6,27 @@
 #    By: ameskine <ameskine@student.1337.com>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/20 18:02:22 by ameskine          #+#    #+#              #
-#    Updated: 2025/07/03 22:45:11 by ameskine         ###   ########.fr        #
+#    Updated: 2025/07/08 18:38:47 by ameskine         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
-CC = cc
-CFLAGS = -Wall -Wextra -Werror
-SRC = built_in_echo.c built_in_exit.c built_in_pwd.c ft_printf.c print_env.c set_envi.c built_in_cd.c  built_in_env.c execution.c helper_function.c processing.c
+CC = cc 
+CFLAGS = -Wall -Wextra -Werror -g
+LDFLAGS = -lreadline -lhistory
+SRC = processing.c execution_exec.c built_in_echo.c built_in_export.c built_in_exit.c built_in_pwd.c    ft_printf.c set_envi.c built_in_cd.c  built_in_env.c helper_function.c 
 OBJ = $(SRC:.c=.o)
 
 all : $(NAME)
 
 %.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@ 
 
 $(NAME) : $(OBJ)
-	$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJ) $(LDFLAGS) -o $(NAME)
 	
 clean:
-	rm -f $(OBJ)
+	rm -f $(OBJ) 
 
 fclean: 
 	rm -f $(NAME) $(OBJ)
