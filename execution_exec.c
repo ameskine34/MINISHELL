@@ -6,7 +6,7 @@
 /*   By: ameskine <ameskine@student.1337.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 14:11:52 by ameskine          #+#    #+#             */
-/*   Updated: 2025/07/08 19:09:47 by ameskine         ###   ########.fr       */
+/*   Updated: 2025/07/13 19:01:43 by ameskine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,15 +23,13 @@ void is_built_in(t_list *lst, t_list **lst1)
     else if (!ft_strcmp(lst->content, "echo"))
         ft_echo(lst);
     else if (!ft_strcmp(lst->content, "env"))
-    {
         ft_env(*lst1);
-    }
     else if (!ft_strcmp(lst->content, "exit"))
         ft_exit(lst);
+    // else if (ft_strcmp(lst->content, "unset"))
+    //     ft_unset(lst, *lst1);
     else
         return ;
-        // else if (ft_strcmp(lst->content, "unset"))
-        //     ft_unset();
 }
 
 void    execution_phase(t_list *data, t_list *env)

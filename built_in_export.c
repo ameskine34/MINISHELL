@@ -6,7 +6,7 @@
 /*   By: ameskine <ameskine@student.1337.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 12:05:03 by ameskine          #+#    #+#             */
-/*   Updated: 2025/07/08 19:09:56 by ameskine         ###   ########.fr       */
+/*   Updated: 2025/07/10 19:16:28 by ameskine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,57 +44,30 @@ static void    sort_list(t_list *env)
     }
 }
 
-// void    swap_env(char **s, char **s2)
-// {
-//     char *tmp;
-
-//     tmp = *s;
-//     *s = *s2;
-//     *s2 = tmp;
-// }
-
-// void    sort_env(char **env)
-// {
-//     int i;
-//     int j;
-
-//     i = 0;
-//     if (!env || !*env)
-//         return ;
-//     while (env[i])
-//     {
-//         j = i+1;
-//         while (env[j])
-//         {
-//             if (ft_strcmp(env[i], env[j]) > 0)
-//             {
-//                 swap_env(&env[i], &env[j]);
-//             }
-//             j++;
-//         }
-//         i++;
-//     }
-// }
-static int     is_alpha(int c)
+static int     is_alphanum_or_underscore(int c)
 {
-    return ((c >= 65 && c <= 90) || (c >= 97 && c <= 122));
+    return ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || c == '_');
 }
 
 static int     is_valid_key(char *key)
 {
     int i;
 
-    i = 0;
+    if (!key || !key[0])
+        return (0);
+    if (!((key[0] >= 'A' && key[0] <= 'Z') || (key[0] >= 'a' && key[0] <= 'z') || key[0] == '_'))
+        return (0);
+    i = 1;
     while (key[i])
     {
-        if (!is_alpha(key[i]))
+        if (!is_alphanum_or_underscore(key[i]))
             return (0);
         i++;
     }
     return (1);
 }
 
-static void    update_or_add_env(t_list **env, char *key, char *value)
+void    update_or_add_env(t_list **env, char *key, char *value)
 {
     t_list *envi;
     
@@ -109,7 +82,7 @@ static void    update_or_add_env(t_list **env, char *key, char *value)
         }
         envi = envi->next;
     }
-    ft_add_back(&envi, ft_new_node(init_env(key, value)));
+    ft_add_back(env, ft_new_node(init_env(ft_strdup(key), ft_strdup(value))));
 }
 
 void    ft_export(t_list *lst, t_list *env)
@@ -119,8 +92,12 @@ void    ft_export(t_list *lst, t_list *env)
     t_list *args;
     char *value;
     char *key;
-        
+
     args = lst->next;
+    temp_env = NULL;
+    value = NULL;
+    key = NULL;
+    equal_sign = NULL;
     if (ft_lst_size(lst) == 1)
     {
         sort_list(env);
@@ -129,9 +106,19 @@ void    ft_export(t_list *lst, t_list *env)
         {
             printf("%s", "declare -x ");
             printf("%s", ((t_env *)temp_env->content)->key);
-            printf("%s", "=\"");
-            printf("%s", ((t_env *)temp_env->content)->value);
-            printf("%s\n", "\"");
+            if (((t_env *)temp_env->content)->value)
+            {   if (((t_env *)temp_env->content)->value[0] != '\"')
+                    printf("%s", "=\"");
+                else
+                    printf("=");
+                printf("%s", ((t_env *)temp_env->content)->value);
+                if (((t_env *)temp_env->content)->value[ft_strlen(((t_env *)temp_env->content)->value - 1)] != '\"')
+                    printf("%s\n", "\"");
+                else
+                    printf("\n");
+            }
+            else
+                printf("\n");
             temp_env = temp_env->next;
         }
     }
@@ -143,24 +130,30 @@ void    ft_export(t_list *lst, t_list *env)
             if (equal_sign)
             {
                 key = ft_substr(args->content, 0, equal_sign - (char *)args->content);
-                value = ft_strdup(equal_sign + 1);        
+                value = ft_strdup(equal_sign + 1);    
             }
-            else if (!is_valid_key(key))
+            else
+            {
+                key = ft_strdup(args->content);
+                value = NULL;
+            }
+            if (!is_valid_key(key))
             {
                 ft_printf("minishell: export: `", 2);
                 ft_printf(args->content, 2);
                 ft_printf("': not a valid identifier\n", 2);
                 free(key);
-                free(value);
+                if (value)
+                    free(value);
             }
             else
             {
                 update_or_add_env(&env, key, value);
                 free(key);
-                free(value);
+                if (value) 
+                    free(value);
             }
             args = args->next;
         }
     }
 }
-

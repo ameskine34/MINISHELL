@@ -6,7 +6,7 @@
 /*   By: ameskine <ameskine@student.1337.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:42:07 by ameskine          #+#    #+#             */
-/*   Updated: 2025/07/08 21:41:09 by ameskine         ###   ########.fr       */
+/*   Updated: 2025/07/10 16:55:53 by ameskine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,9 @@ long ft_atoi(char *str, int *error)
 		{
 			if (num_len(res) == 18)
 			{
-				if (sign == 1 && sign == 1 && (res > (LLONG_MAX - (str[i] - '0')) / 10))
+				if (sign == 1 && (res > (LLONG_MAX - (str[i] - '0')) / 10))
 					*error = 1;
-				else if (sign == -1 && sign == 1 && (res > (LLONG_MIN + (str[i] - '0')) / 10))
+				else if (sign == -1 && (res > (LLONG_MIN + (str[i] - '0')) / 10))
 					*error = 1;
 			}
 			res = res * 10 + (str[i] - '0');
@@ -77,7 +77,7 @@ long ft_atoi(char *str, int *error)
 void ft_exit(t_list *lst) //overall i need to hold the exit value (void ft_exit(t_list *lst, int last_exit_status))
 {
 	int error;
-	long n;
+	unsigned int n;
 	int j;
 
 	j = ft_lst_size(lst);

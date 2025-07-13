@@ -6,7 +6,7 @@
 /*   By: ameskine <ameskine@student.1337.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 15:49:03 by ameskine          #+#    #+#             */
-/*   Updated: 2025/06/25 09:42:28 by ameskine         ###   ########.fr       */
+/*   Updated: 2025/07/10 12:30:44 by ameskine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,9 @@ t_env   *init_env(char *key, char *value)
 
 void    set_envi(t_list **envi, char *env)
 {
-    t_env *lst = NULL;
-    lst = init_env(get_key(env), get_value(env));
-    if (!lst)
-        return ;
-    ft_add_back(envi, ft_new_node(lst));
+        t_env *lst = NULL;
+        lst = init_env(get_key(env), get_value(env));
+        if (!lst)
+            return ;
+        ft_add_back(envi, ft_new_node(lst));
 }
