@@ -6,7 +6,7 @@
 /*   By: ameskine <ameskine@student.1337.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 12:05:03 by ameskine          #+#    #+#             */
-/*   Updated: 2025/07/10 19:16:28 by ameskine         ###   ########.fr       */
+/*   Updated: 2025/07/14 11:20:46 by ameskine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,8 +104,11 @@ void    ft_export(t_list *lst, t_list *env)
         temp_env = env;
         while (temp_env)
         {
-            printf("%s", "declare -x ");
-            printf("%s", ((t_env *)temp_env->content)->key);
+            if (((t_env *)temp_env->content)->key)
+            {
+                printf("%s", "declare -x ");
+                printf("%s", ((t_env *)temp_env->content)->key);
+            }
             if (((t_env *)temp_env->content)->value)
             {   if (((t_env *)temp_env->content)->value[0] != '\"')
                     printf("%s", "=\"");

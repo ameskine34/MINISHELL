@@ -6,7 +6,7 @@
 /*   By: ameskine <ameskine@student.1337.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 18:04:34 by ameskine          #+#    #+#             */
-/*   Updated: 2025/07/09 11:28:01 by ameskine         ###   ########.fr       */
+/*   Updated: 2025/07/14 12:24:00 by ameskine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,5 +133,7 @@ char	**ft_split(char *s, char c);
 void	ft_lst_clear(t_list **lst, void (*del)(void *));
 void free_env_node(void *content);
 void    update_or_add_env(t_list **env, char *key, char *value);
+void    ft_unset(t_list *lst, t_list **lst1);
+
 
 #endif
