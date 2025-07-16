@@ -6,7 +6,7 @@
 /*   By: ameskine <ameskine@student.1337.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 12:05:03 by ameskine          #+#    #+#             */
-/*   Updated: 2025/07/14 11:20:46 by ameskine         ###   ########.fr       */
+/*   Updated: 2025/07/16 12:56:59 by ameskine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,19 +67,21 @@ static int     is_valid_key(char *key)
     return (1);
 }
 
-void    update_or_add_env(t_list **env, char *key, char *value)
+void    update_or_add_env(t_list **env, char *key, char *value, int *is_equal_sign)
 {
     t_list *envi;
     
     envi = *env;
     while (envi)
     {
-        if (!ft_strcmp(((t_env *)envi->content)->key, key))
+        if (!ft_strcmp(((t_env *)envi->content)->key, key) && *is_equal_sign)
         {
             free(((t_env *)envi->content)->value);
             (((t_env *)envi->content)->value) = ft_strdup(value);
             return ;
         }
+        else if (!ft_strcmp(((t_env *)envi->content)->key, key) && !*is_equal_sign)
+            return ;
         envi = envi->next;
     }
     ft_add_back(env, ft_new_node(init_env(ft_strdup(key), ft_strdup(value))));
@@ -92,12 +94,14 @@ void    ft_export(t_list *lst, t_list *env)
     t_list *args;
     char *value;
     char *key;
+    int is_equal_sign;
 
+    is_equal_sign = 0;
+    equal_sign = NULL;
     args = lst->next;
     temp_env = NULL;
     value = NULL;
     key = NULL;
-    equal_sign = NULL;
     if (ft_lst_size(lst) == 1)
     {
         sort_list(env);
@@ -132,11 +136,13 @@ void    ft_export(t_list *lst, t_list *env)
             equal_sign = ft_strchr1(args->content, '=');
             if (equal_sign)
             {
+                is_equal_sign = 1;
                 key = ft_substr(args->content, 0, equal_sign - (char *)args->content);
                 value = ft_strdup(equal_sign + 1);    
             }
             else
             {
+                is_equal_sign = 0;
                 key = ft_strdup(args->content);
                 value = NULL;
             }
@@ -151,7 +157,7 @@ void    ft_export(t_list *lst, t_list *env)
             }
             else
             {
-                update_or_add_env(&env, key, value);
+                update_or_add_env(&env, key, value, &is_equal_sign);
                 free(key);
                 if (value) 
                     free(value);

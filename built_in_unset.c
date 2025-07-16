@@ -6,41 +6,35 @@
 /*   By: ameskine <ameskine@student.1337.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 19:26:29 by ameskine          #+#    #+#             */
-/*   Updated: 2025/07/14 16:58:36 by ameskine         ###   ########.fr       */
+/*   Updated: 2025/07/14 20:18:43 by ameskine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void    ft_unset(t_list *lst, t_list **lst1)
+void    ft_unset(t_list *lst, t_list **lst_env)
 {
+    t_list *current_env;
+    t_list *prev_env;
     t_list *tmp;
-    t_list *current;
-    t_list *prev;
 
+    current_env = *lst_env;
+    prev_env = NULL;
     tmp = lst->next;
-    if (!tmp)
-        return;
-
-    while (tmp)
+    while (current_env)
     {
-        current = *lst1;
-        prev = NULL;
-        while (current)
+        if (!ft_strcmp(((t_env *)current_env->content)->key, tmp->content))
         {
-            if (!ft_strcmp(((t_env *)current->content)->key, tmp->content))
-            {
-                if (prev == NULL)
-                    *lst1 = current->next;
-                else
-                    prev->next = current->next;
-                free_env_node(current->content);
-                free(current);
-                break;
-            }
-            prev = current;
-            current = current->next;
+            if (prev_env == NULL)
+                *lst_env = current_env->next;
+            else
+                prev_env->next = current_env->next;
+            free_env_node(current_env->content);
+            free(current_env);
+            break; 
         }
-        tmp = tmp->next;
+        prev_env = current_env;
+        current_env = current_env->next;
     }
+    tmp = tmp->next;
 }

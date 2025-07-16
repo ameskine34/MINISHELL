@@ -6,7 +6,7 @@
 /*   By: ameskine <ameskine@student.1337.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 18:04:34 by ameskine          #+#    #+#             */
-/*   Updated: 2025/07/14 12:24:00 by ameskine         ###   ########.fr       */
+/*   Updated: 2025/07/16 11:45:05 by ameskine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ int	ft_putchar(unsigned char c);
 int	ft_check_f(char c, va_list list);
 int	ft_printf(const char *s, ...);
 void    ft_export(t_list *lst, t_list *lst1);
-void sort(t_env *lst1);
+void	sort(t_env *lst1);
 void    set_envi(t_list **envi, char *env);
 char	*ft_substr(char *s, unsigned int start, size_t len);
 char    *get_key(char *env);
@@ -131,8 +131,8 @@ t_env   *init_env(char *key, char *value);
 void    ft_env(t_list *envi);
 char	**ft_split(char *s, char c);
 void	ft_lst_clear(t_list **lst, void (*del)(void *));
-void free_env_node(void *content);
-void    update_or_add_env(t_list **env, char *key, char *value);
+void	free_env_node(void *content);
+void    update_or_add_env(t_list **env, char *key, char *value, int *is_equal_sign);
 void    ft_unset(t_list *lst, t_list **lst1);
 
 
