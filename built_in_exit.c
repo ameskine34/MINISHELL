@@ -6,7 +6,7 @@
 /*   By: ameskine <ameskine@student.1337.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:42:07 by ameskine          #+#    #+#             */
-/*   Updated: 2025/07/10 16:55:53 by ameskine         ###   ########.fr       */
+/*   Updated: 2025/07/16 23:54:28 by ameskine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,20 @@ long ft_atoi(char *str, int *error)
 	return ((res * sign));
 }
 
+void handle_exit_numeric_error(char *content)
+{
+    ft_printf("%s", "bash: exit: ");
+    ft_printf("%s", content);
+    ft_printf("%s", ": numeric argument required\\n");
+    exit(2);
+}
+
+void handle_exit_too_many_args()
+{
+    ft_printf("%s", "bash: exit: too many arguments\\n");
+    exit(1);
+}
+
 void ft_exit(t_list *lst) //overall i need to hold the exit value (void ft_exit(t_list *lst, int last_exit_status))
 {
 	int error;
@@ -91,20 +105,13 @@ void ft_exit(t_list *lst) //overall i need to hold the exit value (void ft_exit(
 		n = ft_atoi((lst->next->content), &error);
 		if (error == 1)
 		{
-			ft_printf("%s", "bash: exit: ");
-			ft_printf("%s", lst->next->content);
-			ft_printf("%s", ": numeric argument required\n");
-			exit(2);
+			handle_exit_numeric_error(lst->next->content);
 		}
 		else if (j > 2)
 		{
-			ft_printf("%s", "bash: exit: too many arguments\n");
-			exit(1);
+			handle_exit_too_many_args();
 		}
 		else
 			exit(n);
 	}
 }
-// exit with previous exit_code
-// exit with 2 if arg1 not valid
-// set exit_code to 1 if has more than one arg

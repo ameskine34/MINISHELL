@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   built_in_export.c                                  :+:      :+:    :+:   */
+/*   test111.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ameskine <ameskine@student.1337.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 12:05:03 by ameskine          #+#    #+#             */
-/*   Updated: 2025/07/17 00:51:04 by ameskine         ###   ########.fr       */
+/*   Updated: 2025/07/17 00:37:52 by ameskine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,25 +21,31 @@ static void    swap_env_nodes(t_list *a, t_list *b)
     b->content = tmp;
 }
 
+static void    sort_list_pass(t_list *env_current)
+{
+    t_list *env_next;
+
+    env_next = env_current->next;
+    while (env_next)
+    {
+        if (ft_strcmp(((t_env *)env_current->content)->key, ((t_env *)env_next->content)->key) > 0)
+        {
+            swap_env_nodes(env_current, env_next);
+        }
+        env_next = env_next->next;
+    }
+}
+
 static void    sort_list(t_list *env)
 {
     t_list *env_current;
-    t_list *env_next;
 
     env_current = env;
     if (env == NULL)
         return ;
     while (env_current)
     {
-        env_next = env_current->next;
-        while (env_next)
-        {
-            if (ft_strcmp(((t_env *)env_current->content)->key, ((t_env *)env_next->content)->key) > 0)
-            {
-                swap_env_nodes(env_current, env_next);
-            }
-            env_next = env_next->next;
-        }
+        sort_list_pass(env_current);
         env_current = env_current->next;
     }
 }
@@ -91,7 +97,8 @@ static void    print_exported_env(t_list *env)
 {
     t_list *temp_env;
 
-    (sort_list(env), temp_env = env);
+    sort_list(env);
+    temp_env = env;
     while (temp_env)
     {
         if (((t_env *)temp_env->content)->key)
@@ -183,3 +190,4 @@ void    ft_export(t_list *lst, t_list *env)
         }
     }
 }
+
