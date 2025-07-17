@@ -6,7 +6,7 @@
 /*   By: ameskine <ameskine@student.1337.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 14:11:52 by ameskine          #+#    #+#             */
-/*   Updated: 2025/07/14 12:24:20 by ameskine         ###   ########.fr       */
+/*   Updated: 2025/07/17 22:52:42 by ameskine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,18 +31,15 @@ void is_built_in(t_list *lst, t_list **lst1)
     else
         return ;
 }
-
-void    execution_phase(t_list *data, t_list *env)
+void    executing_one_command(t_list *data)
 {
-    // t_node_infos *infos;
-    // char **env_arr;
+    ;
+} 
+void    execution_phase(t_list *data, t_list *env)
+{   
     if (!data || !data->content)
         return;
-
-    // env_arr = from_env_to_arr(env);
-    is_built_in(data, &env);
-    // is_external_command(((t_cmd*)data->content)->arr_content, env);
-    // infos = init_infos();
-    // init_pipe(data, infos);
-    // init_processes(infos);
+    // is_built_in(data, &env);
+    if ()
+        executing_one_command();
 }

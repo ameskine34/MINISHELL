@@ -58,3 +58,11 @@
         return (NULL);
     }
 }
+
+
+// t_node_infos *infos;
+
+// is_external_command(((t_cmd*)data->content)->arr_content, env);
+    // infos = init_infos();
+    // init_pipe(data, infos);
+    // init_processes(infos);

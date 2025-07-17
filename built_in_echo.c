@@ -6,7 +6,7 @@
 /*   By: ameskine <ameskine@student.1337.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 16:55:32 by ameskine          #+#    #+#             */
-/*   Updated: 2025/07/16 22:53:02 by ameskine         ###   ########.fr       */
+/*   Updated: 2025/07/17 17:39:55 by ameskine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int    check_option(char *s)
     int i;
 
     i = 1;
-    if (!s || s[0] != '-')
+    if (!s || s[0] != '-' || ft_strlen(s) == 1)
         return (0);
     while (s[i])
     {
@@ -40,7 +40,6 @@ void    ft_echo(t_list *lst)
         new_line = 1;
         lst1 = lst1->next;
     }
-    // lst1 = lst;
     while (lst1)
     {
         write(1,lst1->content, ft_strlen(lst1->content));

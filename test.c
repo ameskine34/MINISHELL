@@ -27,15 +27,13 @@ int main()
     {
         i = execve("/usr/bin/ls", args, NULL);
         if (i == -1)
-        {
             printf("ERROR\n");
-        }
     }
     else
     {
         printf("sjfks\n");
     }
     waitpid(-1, &status, 0);
-    int j = WEXITSTATUS(status);
-    printf("this the exit status : %d\n", j);
+    // int j = WEXITSTATUS(status);
+    // printf("this the exit status : %d\n", j);
 }

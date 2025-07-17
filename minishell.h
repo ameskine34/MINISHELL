@@ -6,7 +6,7 @@
 /*   By: ameskine <ameskine@student.1337.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 18:04:34 by ameskine          #+#    #+#             */
-/*   Updated: 2025/07/16 11:45:05 by ameskine         ###   ########.fr       */
+/*   Updated: 2025/07/17 22:54:47 by ameskine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,15 @@ typedef enum s_token_type
 {
 	TOKEN_PIPE = 1,
 	TOKEN_OUT_REDIRECTION_OVERWRITE,
-	TOKEN_OUT_REDIRECTION_APPEND,
 	TOKEN_IN_REDIRECTION,
+	TOKEN_OUT_REDIRECTION_APPEND,
 	TOKEN_HEREDOC,
 	TOKEN_FILE,
 	TOKEN_COMMAND,
 	TOKEN_ARGUMENT,
-}					t_token_type;
+	TOKEN_SPACE,
+	TOKEN_OPERATION,
+} t_token_type;
 
 typedef enum t_bool
 {
@@ -39,22 +41,29 @@ typedef struct s_list
 
 typedef struct s_cmd
 {
-	t_token_type	type;
-	char			*content;
-	int				index;
-	char			**arr_content;
-}					t_cmd;
+	t_token_type type;
+	char *component;
+	char **subcomponents;
+	char **raw_exp;
+	char **composed_exp;
+	char **resolved_exp;
+	char **arr_content;
+	char *heredoc_filename;
+	int index;
+	int has_ambiguous_redir;
+} t_cmd;
 
 typedef struct s_node_infos
 {
-	int				shell_level;
-	int				exit_status;
-	int				**pipes;
-	int				index;
-	int				num_of_pipes;
-	t_list			*data;
-	int				num_of_processes;
-}					t_node_infos;
+	int	shell_level;
+	int	exit_status;
+	int **pipes;
+	int index;
+	int num_of_pipes;
+	t_list *data;
+	t_list *head;
+	int num_of_processes;
+} t_node_infos;
 
 typedef struct s_env
 {
