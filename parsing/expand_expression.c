@@ -13,13 +13,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/parsing.h"
+#include "../includes/minishell.h"
 
-
-char	*expand_env_var(char *expression)
+char	*expand_env_var(char *expression, t_list *env, int in_d_quotes)
 {
-	char *var_name;
-	char *var_value;
+	char	*var_name;
+	char	*var_value;
+	t_env	*env_node;
 
 	if (ft_strlen(expression) == 1)
 	{
@@ -27,65 +27,55 @@ char	*expand_env_var(char *expression)
 		return (var_value);
 	}
 	var_name = ft_substr(expression, 1, ft_strlen(expression) - 1);
-	// var_value = getenv(var_name);
-	// if (!var_value)
-	// 	var_value = ft_strdup("");
-	var_value = ft_strdup("expanded:)");
-	// free(var_name);
+	if (ft_strlen(var_name) == 1 && var_name[0] == '?')
+		return (var_value = ft_itoa(*exit_status()));
+	env_node = get_env(env, var_name);
+	if (!env_node || (env_node && (env_node->value[0] == '\0')))
+	{
+		if (in_d_quotes)
+			var_value = ft_strdup("");
+		else
+			var_value = NULL;
+		return (var_value);
+	}
+	var_value = env_node->value;
 	return (var_value);
 }
 
-char	*expand_double_quotes_var(char *expression)
+char	*expand_double_quotes_var(char *expression, t_list *env)
 {
-	t_list *local_list;
-	t_list *local_list_tmp;
-	char *cmd_node_comp;
-	char *result;
-	char *exp;
-	char *temp_exp;
+	t_list	*local_list;
+	char	*cmd_node_comp;
+	char	*result;
+	char	*exp;
 
 	local_list = NULL;
 	exp = ft_strdup("");
 	save_data_list_between_d_quotes(&local_list, expression);
-	local_list_tmp = local_list;
 	while (local_list)
 	{
 		cmd_node_comp = ((t_cmd *)local_list->content)->component;
 		if (check_for_char(cmd_node_comp, '$'))
-			result = expand_env_var(cmd_node_comp);
+			result = expand_env_var(cmd_node_comp, env, 1);
 		else
 			result = ft_strdup(cmd_node_comp);
 		exp = ft_strjoin(exp, result);
-		// free(result);
 		local_list = local_list->next;
 	}
 	return (exp);
 }
 
-char	*expand_expression(char *expression)
+char	*expand_expression(char *expression, t_list *env)
 {
+	char	*result;
+
+	result = NULL;
 	if (check_for_char(expression, '$') && expression[0] != '\'')
 	{
 		if (expression[0] == '"')
-			return (expand_double_quotes_var(expression));
+			result = expand_double_quotes_var(expression, env);
 		else
-			return (expand_env_var(expression));
+			result = expand_env_var(expression, env, 0);
 	}
+	return (result);
 }
-// $
-// void	get_var_value(char *expression)
-// {
-// 	char *next_content;
-// 	char *result;
-
-// 	next_content = NULL;
-// 	if (data->next)
-// 		next_content = ((t_cmd *)data->next->content)->content;
-// 	if (ft_strlen(content) == 1 && (next_content == NULL
-// 			|| ft_strncmp(next_content, " ", ft_strlen(next_content)) == 0
-// 			|| ft_strncmp(next_content, "$", ft_strlen(next_content)) == 0))
-// 		return ;
-// 	result = replace_env_var(data);
-// 	if (if_space(result) == 1)
-// 		((t_cmd *)data->content)->has_ambiguous_redir = 1;
-// }

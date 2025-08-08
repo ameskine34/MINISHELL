@@ -3,121 +3,67 @@
 /*                                                        :::      ::::::::   */
 /*   built_in_export.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ameskine <ameskine@student.1337.com>       +#+  +:+       +#+        */
+/*   By: ameskine <ameskine@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 12:05:03 by ameskine          #+#    #+#             */
-/*   Updated: 2025/07/19 21:29:56 by ameskine         ###   ########.fr       */
+/*   Updated: 2025/08/08 22:32:27 by ameskine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/built_in.h"
 
-static void	swap_env_nodes(t_list *a, t_list *b)
-{
-	void	*tmp;
-
-	tmp = a->content;
-	a->content = b->content;
-	b->content = tmp;
-}
-
-static void	sort_list(t_list *env)
-{
-	t_list	*env_current;
-	t_list	*env_next;
-
-	env_current = env;
-	if (env == NULL)
-		return ;
-	while (env_current)
-	{
-		env_next = env_current->next;
-		while (env_next)
-		{
-			if (ft_strcmp(((t_env *)env_current->content)->key, ((t_env *)env_next->content)->key) > 0)
-			{
-				swap_env_nodes(env_current, env_next);
-			}
-			env_next = env_next->next;
-		}
-		env_current = env_current->next;
-	}
-}
-
-static int	is_alphanum_or_underscore(int c)
-{
-	return ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || c == '_');
-}
-
-static int	is_valid_key(char *key)
-{
-	int	i;
-
-	if (!key || !key[0])
-		return (0);
-	if (!((key[0] >= 'A' && key[0] <= 'Z') || (key[0] >= 'a' && key[0] <= 'z') || key[0] == '_'))
-		return (0);
-	i = 1;
-	while (key[i])
-	{
-		if (!is_alphanum_or_underscore(key[i]))
-			return (0);
-		i++;
-	}
-	return (1);
-}
-
-void	update_or_add_env(t_list **env, char *key, char *value, int *is_equal_sign)
+void	update_or_add_env(t_list **env, char *key, char *value,
+		int *is_equal_sign)
 {
 	t_list	*envi;
 
 	envi = *env;
 	while (envi)
 	{
-		if (!ft_strcmp(((t_env *)envi->content)->key, key) && *is_equal_sign)
+		if (((t_env *)envi->content)->key
+			&& !ft_strcmp(((t_env *)envi->content)->key, key) && *is_equal_sign)
 		{
-			free(((t_env *)envi->content)->value);
 			(((t_env *)envi->content)->value) = ft_strdup(value);
 			return ;
 		}
-		else if (!ft_strcmp(((t_env *)envi->content)->key, key) && !*is_equal_sign)
+		else if (((t_env *)envi->content)->key
+			&& !ft_strcmp(((t_env *)envi->content)->key, key)
+			&& !*is_equal_sign)
 			return ;
 		envi = envi->next;
 	}
 	ft_lstadd_back(env, ft_lstnew(init_env(ft_strdup(key), ft_strdup(value))));
 }
 
-static void	print_exported_env(t_list *env)
+static void	print_exported_env(t_list *temp_env)
 {
-	t_list	*temp_env;
-
-	(sort_list(env), temp_env = env);
 	while (temp_env)
 	{
-		if (((t_env *)temp_env->content)->key)
-		{
-			write(1, "declare -x ", 11);
-			write(1, ((t_env *)temp_env->content)->key, ft_strlen(((t_env *)temp_env->content)->key));
-		}
+		print_key(temp_env);
 		if (((t_env *)temp_env->content)->value)
 		{
+			if (((t_env *)temp_env->content)->value[0] == '\0')
+			{
+				write(1, "=\"\"\n", 4);
+				break ;
+			}
 			if (((t_env *)temp_env->content)->value[0] != '\"')
 				write(1, "=\"", 2);
 			else
 				write(1, "=", 1);
-			write(1, ((t_env *)temp_env->content)->value, ft_strlen(((t_env *)temp_env->content)->value));
-			if (((t_env *)temp_env->content)->value[ft_strlen(((t_env *)temp_env->content)->value)- 1] != '"')
+			write(1, ((t_env *)temp_env->content)->value,
+				ft_strlen(((t_env *)temp_env->content)->value));
+			if (((t_env *)temp_env->content)->value[
+					ft_strlen(((t_env *)temp_env->content)->value) - 1] != '"')
 				write(1, "\"", 1);
-			else
-				write(1, "\n", 1);
-		}
-		else
 			write(1, "\n", 1);
+		}
 		temp_env = temp_env->next;
 	}
 }
 
-static void	extract_key_value(char *arg_content, char **key, char **value, int *is_equal_sign)
+static void	extract_key_value(char *arg_content, char **key, char **value,
+		int *is_equal_sign)
 {
 	char	*equal_sign;
 
@@ -136,16 +82,6 @@ static void	extract_key_value(char *arg_content, char **key, char **value, int *
 	}
 }
 
-static void	handle_invalid_key_error(char *arg_content, char *key, char *value)
-{
-	write(2, "minishell: export: `", 20);
-	write(2, arg_content, ft_strlen(arg_content));
-	write(2, "\': not a valid identifier\n", 25);
-	free(key);
-	if (value)
-		free(value);
-}
-
 static void	process_export_arg(t_list **env, char *arg_content)
 {
 	char	*value;
@@ -156,21 +92,24 @@ static void	process_export_arg(t_list **env, char *arg_content)
 	if (!is_valid_key(key))
 		handle_invalid_key_error(arg_content, key, value);
 	else
-	{
 		update_or_add_env(env, key, value, &is_equal_sign);
-		free(key);
-		if (value)
-			free(value);
-	}
 }
 
 void	ft_export(t_list *lst, t_list *env)
 {
-	t_list *args;
+	t_list	*temp_env;
+	t_list	*args;
 
+	*exit_status() = 0;
 	args = lst->next;
+	temp_env = NULL;
 	if (ft_lstsize(lst) == 1)
-		print_exported_env(env);
+	{
+		sort_list(env);
+		temp_env = env;
+		print_exported_env(temp_env);
+		*exit_status() = 0;
+	}
 	else
 	{
 		while (args)

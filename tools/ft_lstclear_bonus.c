@@ -6,7 +6,7 @@
 /*   By: yaithadd <younessaithadou9@gmail.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 18:26:05 by yaithadd          #+#    #+#             */
-/*   Updated: 2024/11/22 20:27:58 by yaithadd         ###   ########.fr       */
+/*   Updated: 2025/07/08 12:22:17 by yaithadd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,4 +26,3 @@ void	ft_lstclear(t_list **lst, void (*del)(void *))
 		}
 	}
 }
-	

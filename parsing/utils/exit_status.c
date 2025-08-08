@@ -6,15 +6,15 @@
 /*   By: yaithadd <younessaithadou9@gmail.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 12:58:59 by yaithadd          #+#    #+#             */
-/*   Updated: 2025/07/25 18:18:55 by yaithadd         ###   ########.fr       */
+/*   Updated: 2025/08/05 14:55:27 by yaithadd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/parsing.h"
+#include "../../includes/minishell.h"
 
-int	*exit_status(void)
+long	*exit_status(void)
 {
-	static int exit_code;
-	
+	static long	exit_code;
+
 	return (&exit_code);
 }

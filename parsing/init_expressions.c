@@ -6,11 +6,11 @@
 /*   By: yaithadd <younessaithadou9@gmail.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 15:54:43 by yaithadd          #+#    #+#             */
-/*   Updated: 2025/07/24 14:16:35 by yaithadd         ###   ########.fr       */
+/*   Updated: 2025/08/05 15:35:33 by yaithadd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/parsing.h"
+#include "../includes/minishell.h"
 
 char	*get_raw_exp(t_cmd *cmd_node, int with_quotes)
 {
@@ -19,14 +19,20 @@ char	*get_raw_exp(t_cmd *cmd_node, int with_quotes)
 	int		i;
 
 	joined_value = ft_strdup("");
+	if (!cmd_node->subcomponents)
+		return (joined_value);
 	i = -1;
 	while (cmd_node->subcomponents[++i])
 	{
 		if (!with_quotes)
 		{
-			exp_content = get_expression_content(ft_strdup(cmd_node->subcomponents[i]));
+			if ((cmd_node->subcomponents[i][0] == '\'')
+					|| (cmd_node->subcomponents[i][0] == '"'))
+				exp_content = get_expression_content
+					(cmd_node->subcomponents[i]);
+			else
+				exp_content = ft_strdup(cmd_node->subcomponents[i]);
 			joined_value = ft_strjoin(joined_value, exp_content);
-			// free(exp_content);
 		}
 		else
 			joined_value = ft_strjoin(joined_value, cmd_node->subcomponents[i]);
@@ -34,60 +40,58 @@ char	*get_raw_exp(t_cmd *cmd_node, int with_quotes)
 	return (joined_value);
 }
 
-void	join_resolved_exp(char **joined_value, char *exp, int with_quotes)
+char	*get_exp(char *comp, t_list *env)
 {
-	char	*exp_content;
+	char	*exp;
 
-	if (!with_quotes)
+	exp = NULL;
+	if (check_for_char(comp, '$') && comp[0] != '\'')
 	{
-		exp_content = get_expression_content(exp);
-		*joined_value = ft_strjoin(*joined_value, exp_content);
-		// free(exp_content);
+		exp = expand_expression(comp, env);
+		if (exp && exp[0] == '\0')
+			exp = NULL;
 	}
 	else
-	{
-		*joined_value = ft_strjoin(*joined_value, exp);
-		// free(exp);
-	}
+		exp = ft_strdup(comp);
+	return (exp);
 }
 
-char	*get_resolved_exp(t_cmd *cmd_node, int with_quotes)
-{
-	char	*joined_value;
-	char	*exp;
-	int		i;
+// char	*get_resolved_exp(t_cmd *cmd_node, int with_quotes, t_list *env)
+// {
+// 	char	*joined_value;
+// 	char	*exp;
+// 	int		i;
 
-	i = -1;
-	joined_value = ft_strdup("");
-	while (cmd_node->subcomponents[++i])
-	{
-		if (check_for_char(cmd_node->subcomponents[i], '$')
-			&& cmd_node->subcomponents[i][0] != '\'')
-			exp = expand_expression(cmd_node->subcomponents[i]);
-		else
-			exp = ft_strdup(cmd_node->subcomponents[i]);
-		join_resolved_exp(&joined_value, exp, with_quotes);
-	}
-	return (joined_value);
-}
+// 	with_quotes = 0;
+// 	i = -1;
+// 	exp = NULL;
+// 	joined_value = NULL;
+// 	while (cmd_node->subcomponents[++i])
+// 	{
+// 		exp = get_exp(cmd_node->subcomponents[i], env);
+// 		if (exp)
+// 		{	
+// 			joined_value = ft_strjoin(joined_value, exp);
+// 		}
+// 	}
+// 	return (joined_value);
+// }
 
-void	init_expressions(t_list *data)
-{
-	int		i;
-	t_cmd	*cmd_node;
+// void	init_expressions(t_list *data, t_list *env)
+// {
+// 	t_cmd	*cmd_node;
+// 	char	*resolved_exp;
 
-	while (data)
-	{
-		cmd_node = ((t_cmd *)data->content);
-		if (cmd_node->subcomponents)
-		{
-			if (check_for_string(cmd_node->component, "<<"))
-				heredoc(data);
-			if (ambiguous(get_resolved_exp(cmd_node, 1)))
-				cmd_node->has_ambiguous_redir = 1;
-		}
-		data = data->next;
-	}
-}
-
-// * echo hello > $USER"$USER"DD
+// 	resolved_exp = NULL;
+// 	while (data)
+// 	{
+// 		cmd_node = ((t_cmd *)data->content);
+// 		if (cmd_node->subcomponents && cmd_node->type != TOKEN_HEREDOC)
+// 		{
+// 			resolved_exp = get_resolved_exp(cmd_node, 0, env);
+// 			if (!resolved_exp || (resolved_exp && ambiguous(resolved_exp)))
+// 				cmd_node->has_ambiguous_redir = 1;
+// 		}
+// 		data = data->next;
+// 	}
+// }

@@ -6,19 +6,21 @@
 /*   By: yaithadd <younessaithadou9@gmail.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 16:24:00 by yaithadd          #+#    #+#             */
-/*   Updated: 2025/07/25 18:17:16 by yaithadd         ###   ########.fr       */
+/*   Updated: 2025/08/05 16:35:03 by yaithadd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/parsing.h"
+#include "../includes/minishell.h"
 
-char	*get_key(char *env) 
+char	*get_key(char *env)
 {
 	int		i;
 	char	*key;
 
 	i = 0;
 	key = NULL;
+	if (!env)
+		return (NULL);
 	while (env[i])
 	{
 		if (env[i] == '=')
@@ -36,6 +38,8 @@ char	*get_value(char *env)
 
 	value = NULL;
 	i = 0;
+	if (!env)
+		return (NULL);
 	while (env[i])
 	{
 		if (env[i] == '=')
@@ -51,7 +55,7 @@ t_env	*init_env(char *key, char *value)
 {
 	t_env	*lst;
 
-	lst = malloc(sizeof(t_env));
+	lst = gc_malloc(sizeof(t_env));
 	if (!lst)
 		return (NULL);
 	lst->key = key;
@@ -72,7 +76,7 @@ void	set_env(t_list **env, char *env__)
 
 void	init_env_list(char **env_, t_list **env)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (env_[i])
@@ -80,4 +84,6 @@ void	init_env_list(char **env_, t_list **env)
 		set_env(env, env_[i]);
 		i++;
 	}
+	if (!env_ || !*env_)
+		set_env(env, NULL);
 }

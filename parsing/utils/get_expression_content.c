@@ -6,11 +6,28 @@
 /*   By: yaithadd <younessaithadou9@gmail.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 16:07:56 by yaithadd          #+#    #+#             */
-/*   Updated: 2025/07/24 13:07:01 by yaithadd         ###   ########.fr       */
+/*   Updated: 2025/08/05 14:56:50 by yaithadd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/parsing.h"
+#include "../../includes/minishell.h"
+
+int	get_expression_len(char *word)
+{
+	int	i;
+	int	len;
+
+	i = 0;
+	len = 0;
+	if (word[i] == 34 || word[i] == 39)
+		i++;
+	while (word[i + 1])
+	{
+		len++;
+		i++;
+	}
+	return (len);
+}
 
 char	*get_expression_content(char *word)
 {
@@ -19,21 +36,17 @@ char	*get_expression_content(char *word)
 	char	*new_word;
 
 	i = 0;
-	len = 0;
-	while (word[i])
-	{
-		if (word[i] != 34 && word[i] != 39)
-			len++;
-		i++;
-	}
+	len = get_expression_len(word);
 	new_word = (char *)gc_malloc((len + 1) * sizeof(char));
 	if (!new_word)
 		return (NULL);
-	(1) && (i = 0), (len = 0);
-	while (word[i])
+	(1) && (i = 0, len = 0);
+	if (word[i] == 34 || word[i] == 39)
+		i++;
+	while (word[i + 1])
 	{
-		if (word[i] != 34 && word[i] != 39)
-			new_word[len++] = word[i];
+		new_word[len] = word[i];
+		len++;
 		i++;
 	}
 	new_word[len] = '\0';

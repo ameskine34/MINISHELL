@@ -13,26 +13,50 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/parsing.h"
+#include "../includes/minishell.h"
 
+int	red_error(t_list *data)
+{
+	skip_next_space(&data);
+	if (data->next && check_for_operations(data->next))
+		return ((syntax_error(CODE_UNEXPECTED_TOKEN,
+					((t_cmd *)data->next->content)->component), 1));
+	return (0);
+}
+
+int	pipe_error(t_list *data)
+{
+	skip_next_space(&data);
+	if (data->next
+		&& check_for_string(((t_cmd *)data->next->content)->component, "|"))
+		return ((syntax_error(CODE_UNEXPECTED_TOKEN,
+					((t_cmd *)data->next->content)->component), 1));
+	return (0);
+}
 
 int	operations_syntax(t_list *data)
 {
-	t_list *last_node;
+	t_list	*last_node;
+	char	*component;
 
-	if (check_for_string(((t_cmd *)data->content)->component, "|"))
-		return (syntax_error(UNEXPECTED_TOKEN, "|"), 1);
+	skip_space_to_next(&data);
+	if (data && check_for_string(((t_cmd *)data->content)->component, "|"))
+		return (syntax_error(CODE_UNEXPECTED_TOKEN, "|"), 1);
 	last_node = ft_lstlast(data);
 	while (data)
 	{
-		if (data->next && check_for_operations(data)
-			&& check_for_operations(data->next))
-			return (syntax_error(UNEXPECTED_TOKEN,
-					((t_cmd *)data->next->content)->component), 1);
+		component = ((t_cmd *)data->content)->component;
+		if (check_for_redirections(component))
+			if (red_error(data))
+				return (1);
+		if (check_for_string(component, "|"))
+			if (pipe_error(data))
+				return (1);
 		data = data->next;
 	}
-	if (check_for_operations(last_node))
-		return (syntax_error(UNEXPECTED_TOKEN, "newline"), 1);
+	skip_space_to_prev(&last_node);
+	if (last_node && check_for_operations(last_node))
+		return (syntax_error(CODE_UNEXPECTED_TOKEN, "newline"), 1);
 	return (0);
 }
 

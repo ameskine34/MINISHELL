@@ -6,11 +6,11 @@
 /*   By: yaithadd <younessaithadou9@gmail.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 10:00:46 by yaithadd          #+#    #+#             */
-/*   Updated: 2025/07/26 15:31:30 by yaithadd         ###   ########.fr       */
+/*   Updated: 2025/08/06 10:28:22 by yaithadd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/parsing.h"
+#include "../../includes/minishell.h"
 
 void	*allocate(t_list **list, int size)
 {
@@ -19,10 +19,12 @@ void	*allocate(t_list **list, int size)
 
 	address = malloc(size);
 	if (!address)
-		return (NULL);
+		return (free_regulare(), free_env_list(), gc_fds(0, GC_FREE), write(2,
+				"malloc error\n", 13), exit(1), (void *)0);
 	node = malloc(sizeof(t_list));
 	if (!node)
-		return (NULL);
+		return (free_regulare(), free_env_list(), gc_fds(0, GC_FREE), write(2,
+				"malloc error\n", 13), exit(1), (void *)0);
 	node->content = address;
 	node->next = NULL;
 	node->prev = NULL;
@@ -43,11 +45,32 @@ void	free_(t_list *list)
 	}
 }
 
-void	*gc_malloc_local(int size, t_gc_target target, t_gc_action action)
+void	append_add_to_gc(void *add, t_list **env_list, t_list **regular_list,
+		t_gc_target target)
+{
+	t_list	*node;
+
+	node = malloc(sizeof(t_list));
+	if (!node)
+		return (free_regulare(), free_env_list(), gc_fds(0, GC_FREE), write(2,
+				"malloc error\n", 13), exit(1));
+	node->content = add;
+	node->next = NULL;
+	node->prev = NULL;
+	if (target == GC_REGULARE)
+		ft_lstadd_back(env_list, node);
+	else if (target == GC_ENV_LIST)
+		ft_lstadd_back(regular_list, node);
+}
+
+void	*gc_malloc_local(int size, t_gc_target target, t_gc_action action,
+		void *add)
 {
 	static t_list	*env_list;
 	static t_list	*regulare_list;
 
+	if (add)
+		return (append_add_to_gc(add, &env_list, &regulare_list, target), NULL);
 	if (action == GC_ALLOCATE)
 	{
 		if (target == GC_REGULARE)
@@ -64,4 +87,5 @@ void	*gc_malloc_local(int size, t_gc_target target, t_gc_action action)
 		else if (target == GC_ENV_LIST)
 			return (free_(env_list), env_list = NULL, (void *)0);
 	}
+	return (NULL);
 }

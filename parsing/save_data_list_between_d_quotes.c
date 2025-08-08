@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/parsing.h"
+#include "../includes/minishell.h"
 
 void	save_content(t_list **data, char *str, int *i)
 {
@@ -20,7 +20,7 @@ void	save_content(t_list **data, char *str, int *i)
 
 	len = 0;
 	j = *i;
-	while (str[*i] && str[*i] != '$') // && str[*i] != '\'' && str[*i] != '"'
+	while (str[*i] && str[*i] != '$')
 	{
 		(*i)++;
 		len++;
@@ -39,7 +39,9 @@ void	save_var_name(t_list **data, char *str, int *i)
 	j = *i;
 	(*i)++;
 	while (str[*i] && str[*i] != '$' && ((str[*i] >= 65 && str[*i] <= 90)
-			|| (str[*i] >= 48 && str[*i] <= 57) || str[*i] == 95 || (str[*i] >= 97 && str[*i] <= 122)))
+			|| (str[*i] >= 48 && str[*i] <= 57)
+			|| str[*i] == 95 || (str[*i] >= 97 && str[*i] <= 122)
+			|| str[*i] == '?'))
 	{
 		(*i)++;
 		len++;
@@ -59,7 +61,5 @@ void	save_data_list_between_d_quotes(t_list **data, char *content)
 			save_content(data, content, &i);
 		if (content[i] == '$')
 			save_var_name(data, content, &i);
-		// if (content[i] == '\'' || content[i] == '"')
-		// 	i++;
 	}
 }

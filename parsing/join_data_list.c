@@ -6,11 +6,11 @@
 /*   By: yaithadd <younessaithadou9@gmail.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 21:43:37 by yaithadd          #+#    #+#             */
-/*   Updated: 2025/07/24 13:12:11 by yaithadd         ###   ########.fr       */
+/*   Updated: 2025/08/05 15:51:03 by yaithadd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/parsing.h"
+#include "../includes/minishell.h"
 
 void	remove_node(t_list **data)
 {
@@ -21,15 +21,12 @@ void	remove_node(t_list **data)
 		(*data)->prev->next = (*data)->next;
 	if ((*data)->next)
 		(*data)->next->prev = (*data)->prev;
-	// free_cmd_node((*data)->content);
-	// free(*data);
 	(*data) = temp;
 }
 
 void	join_nodes(t_list **data)
 {
 	t_list	*head;
-	t_list	*temp;
 	char	*result;
 
 	head = (*data);
@@ -39,16 +36,9 @@ void	join_nodes(t_list **data)
 		if (((t_cmd *)(*data)->content)->type == TOKEN_OPERATION
 			|| ((t_cmd *)(*data)->content)->type == TOKEN_SPACE)
 			break ;
-		temp = (*data)->next;
 		result = ft_strjoin(result, ((t_cmd *)(*data)->content)->component);
-		if (*data != head)
-		{
-			// free_cmd_node((*data)->content);
-			// free(*data);
-		}
-		(*data) = temp;
+		(*data) = (*data)->next;
 	}
-	// free(((t_cmd *)head->content)->component);
 	((t_cmd *)head->content)->component = result;
 	head->next = (*data);
 	if (*data)
@@ -58,16 +48,10 @@ void	join_nodes(t_list **data)
 void	join_data_list(t_list **data)
 {
 	t_list	*head;
-	t_list	*temp;
-	t_cmd	*cmd_node;
 
-	while (*data && ((t_cmd *)(*data)->content)->type == TOKEN_SPACE)
-	{
-		temp = (*data)->next;
-		// free_cmd_node((*data)->content);
-		// free(*data);
-		(*data) = temp;
-	}
+	while (*data && (((t_cmd *)(*data)->content)->type == TOKEN_SPACE
+		|| ((t_cmd *)(*data)->content)->skip_node))
+		(*data) = (*data)->next;
 	head = *data;
 	while (*data)
 	{

@@ -13,31 +13,37 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/parsing.h"
+#include "../includes/minishell.h"
 
-
-//*   echo hello | ls -l |<< $USER"DD" > outfile"$USER"
-
-// * gcc *.c utils/*.c -L../tools -lft -lreadline
-
-void	pars_input(char *str, t_list **data)
+int	check_if_only_spaces(t_list *data)
 {
-	*get_target() = GC_REGULARE;
-	*get_action() = GC_ALLOCATE;
-	if (double_single_quotes_syntax(str))
-		return (free(str));
-	save_data_list(str, data);
-	init_data_list(data);
-	join_data_list(data);
-	init_expressions(*data);
-	tokenization(*data);
-	if (check_syntax(*data))
+	while (data)
 	{
-		*get_target() = GC_REGULARE;
-		*get_action() = GC_FREE;
-		gc_malloc(0);
-		return ;
+		if (!check_for_string(((t_cmd *)data->content)->component, " "))
+			return (0);
+		data = data->next;
 	}
+	return (1);
+}
+
+int	pars_input(char *str, t_list **data, t_list *env)
+{
+	if (double_single_quotes_syntax(str))
+		return (free(str), *exit_status() = 2,
+			syntax_error(CODE_D_S_Q_SYN_ERR, NULL), 0);
+	alloc_regulare();
+	save_data_list(str, data);
+	if (check_if_only_spaces(*data))
+		return (free(str), free_regulare(), 0);
+	init_subcomponents(*data);
+	if (check_syntax(*data))
+		return (free(str), free_regulare(), *exit_status() = 2, 0);
+	if (init_heredoc(*data, env))
+		return (free(str), free_regulare(), gc_fds(0, GC_FREE), 0);
+	init_data_list(data, env);
+	join_data_list(data);
+	tokenization(*data);
 	indexing(*data);
 	join_cmds(*data);
+	return (1);
 }

@@ -6,11 +6,11 @@
 /*   By: yaithadd <younessaithadou9@gmail.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:00:50 by yaithadd          #+#    #+#             */
-/*   Updated: 2025/07/25 17:26:45 by yaithadd         ###   ########.fr       */
+/*   Updated: 2025/08/05 14:57:13 by yaithadd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/parsing.h"
+#include "../../includes/minishell.h"
 
 t_gc_target	*get_target(void)
 {
@@ -21,7 +21,7 @@ t_gc_target	*get_target(void)
 
 t_gc_action	*get_action(void)
 {
-	static t_gc_action action;
-	
+	static t_gc_action	action;
+
 	return (&action);
 }

@@ -2,11 +2,11 @@
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   ft_strchr.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+        
+/*                                                    +:+ +:+
 	+:+     */
-/*   By: yaithadd <younessaithadou9@gmail.com>      +#+  +:+      
+/*   By: yaithadd <younessaithadou9@gmail.com>      +#+  +:+
 	+#+        */
-/*                                                +#+#+#+#+#+  
+/*                                                +#+#+#+#+#+
 	+#+           */
 /*   Created: 2024/10/27 17:58:35 by yaithadd          #+#    #+#             */
 /*   Updated: 2025/05/26 20:22:01 by yaithadd         ###   ########.fr       */
@@ -15,12 +15,11 @@
 
 #include "libft.h"
 
-
 char	*ft_strchr(const char *s, int c)
 {
-	int i;
-	char *temp;
-	unsigned char ch;
+	int				i;
+	char			*temp;
+	unsigned char	ch;
 
 	temp = (char *)s;
 	ch = (unsigned char)c;

@@ -13,25 +13,28 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/parsing.h"
-
+#include "../includes/minishell.h"
 
 void	tokenization(t_list *data)
 {
-	t_cmd *cmd;
+	t_cmd	*cmd;
 
 	while (data)
 	{
 		cmd = (t_cmd *)data->content;
-		if (!data->prev || (data->prev
-				&& check_for_string(((t_cmd *)data->prev->content)->component,
-					"|")))
-			cmd->type = TOKEN_COMMAND;
-		if (((t_cmd *)data->content)->type == TOKEN_OPERATION)
-			((t_cmd *)data->content)->type = check_for_operations(data);
-		if (data->prev
-			&& check_for_redirections(((t_cmd *)data->prev->content)->component))
-			cmd->type = TOKEN_FILE;
+		if (cmd->type == TOKEN_WORD)
+		{
+			data = data->next;
+			continue ;
+		}
+		if (cmd->type == TOKEN_OPERATION)
+		{
+			cmd->type = check_for_operations(data);
+			if (cmd->type >= TOKEN_OUT_REDIRECTION_OVERWRITE
+				&& cmd->type <= TOKEN_HEREDOC)
+				if (data->next)
+					((t_cmd *)data->next->content)->type = TOKEN_FILE;
+		}
 		if (cmd->type == 0)
 			cmd->type = TOKEN_ARGUMENT;
 		data = data->next;

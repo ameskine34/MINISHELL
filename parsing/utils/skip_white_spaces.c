@@ -6,11 +6,11 @@
 /*   By: yaithadd <younessaithadou9@gmail.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 09:55:13 by yaithadd          #+#    #+#             */
-/*   Updated: 2025/07/19 15:24:09 by yaithadd         ###   ########.fr       */
+/*   Updated: 2025/07/31 10:10:51 by yaithadd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/parsing.h"
+#include "../../includes/minishell.h"
 
 void	skip_white_spaces(char *str, int *i)
 {

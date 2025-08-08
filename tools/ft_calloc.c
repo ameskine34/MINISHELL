@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <limits.h>
+
 void	*ft_calloc(size_t nmemb, size_t size)
 {
 	char	*allocated;

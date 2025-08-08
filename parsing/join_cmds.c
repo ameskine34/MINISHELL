@@ -13,65 +13,12 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/parsing.h"
-
-
-// int	get_len(t_list *data, int i)
-// {
-// 	int		len;
-// 	t_cmd	*cmd;
-
-// 	len = 0;
-// 	while (data)
-// 	{
-// 		cmd = data->content;
-// 		if (cmd->type != TOKEN_ARGUMENT && cmd->type != TOKEN_COMMAND)
-// 		{
-// 			data = data->next;
-// 			continue ;
-// 		}
-// 		if (cmd->index == i)
-// 			len++;
-// 		else
-// 			break ;
-// 		data = data->next;
-// 	}
-// 	return (len);
-// }
-
-// void	join_cmd(t_list **data, int i, t_cmd *cmd_arr_content)
-// {
-// 	int		len;
-// 	t_cmd	*cmd;
-// 	int		j;
-
-// 	len = get_len(*data, i);
-// 	cmd_arr_content->arr_content = (char **)gc_malloc((len + 1)
-// * sizeof(char *));
-// 	if (!cmd_arr_content->arr_content)
-// 		return ;
-// 	j = 0;
-// 	while (*data)
-// 	{
-// 		cmd = (*data)->content;
-// 		if (cmd->type != TOKEN_ARGUMENT && cmd->type != TOKEN_COMMAND)
-// 		{
-// 			(*data) = (*data)->next;
-// 			continue ;
-// 		}
-// 		if (cmd->index != i)
-// 			break ;
-// 		cmd_arr_content->arr_content[j] = ft_strdup(cmd->component);
-// 		j++;
-// 		(*data) = (*data)->next;
-// 	}
-// 	cmd_arr_content->arr_content[j] = NULL;
-// }
+#include "../includes/minishell.h"
 
 void	join_cmd(t_list **data, int i)
 {
-	t_list *head;
-	t_list *joined_list;
+	t_list	*head;
+	t_list	*joined_list;
 
 	head = *data;
 	joined_list = NULL;
@@ -79,31 +26,62 @@ void	join_cmd(t_list **data, int i)
 	{
 		if (((t_cmd *)(*data)->content)->index != i)
 			break ;
-		if (((t_cmd *)(*data)->content)->type == TOKEN_COMMAND
+		if (((t_cmd *)(*data)->content)->type == TOKEN_WORD
 			|| ((t_cmd *)(*data)->content)->type == TOKEN_ARGUMENT)
-			ft_lstadd_back(&joined_list,
-				ft_lstnew(((t_cmd *)(*data)->content)->component));
+			if (!((t_cmd *)(*data)->content)->skip_node)
+				ft_lstadd_back(&joined_list,
+					ft_lstnew(((t_cmd *)(*data)->content)->component));
 		*data = (*data)->next;
 	}
 	((t_cmd *)head->content)->command_head = joined_list;
 }
 
-void	join_cmds(t_list *data)
+void	fill_arr_content(t_list *head, t_list *to_fill)
 {
-	int i;
-	t_cmd *cmd;
+	int	i;
 
 	i = 0;
-	t_list *temp = data;
+	while (to_fill)
+	{
+		((t_cmd *)head->content)->arr_content[i] = ft_strdup
+			((char *)to_fill->content);
+		to_fill = to_fill->next;
+		i++;
+	}
+	((t_cmd *)head->content)->arr_content[i] = NULL;
+}
+
+void	init_arr_content(t_list *data)
+{
+	while (data)
+	{
+		if (((t_cmd *)data->content)->command_head)
+		{
+			((t_cmd *)data->content)->arr_content = gc_malloc
+				((ft_lstsize(((t_cmd *)data->content)
+							->command_head) + 1) * sizeof(char *));
+			fill_arr_content(data, ((t_cmd *)data->content)->command_head);
+		}
+		data = data->next;
+	}
+}
+
+void	join_cmds(t_list *data)
+{
+	int		i;
+	t_cmd	*cmd;
+	t_list	*temp;
+
+	i = 0;
+	temp = data;
 	while (data)
 	{
 		cmd = data->content;
 		if (cmd->index == i)
-		{
 			join_cmd(&data, i);
-			if (data)
-				data = data->next;
-		}
+		if (data)
+			data = data->next;
 		i++;
 	}
+	init_arr_content(temp);
 }

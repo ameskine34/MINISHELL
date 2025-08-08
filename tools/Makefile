@@ -19,25 +19,24 @@ FLAGS = -Wall -Werror -Wextra
 NAME = libft.a
 
 %.o: %.c ${HEADER} 
-	$(CC) $(FLAGS) -I ${INLCUDE}  -c $< -o $@
+	@$(CC) $(FLAGS) -I ${INLCUDE}  -c $< -o $@
 
 all: ${NAME} 
 
 ${NAME}: ${OBJS}
-	ar rcs ${NAME} ${OBJS}
+	@ar rcs ${NAME} ${OBJS}
 
 bonus: .timestamp_flag
 
 .timestamp_flag: ${BONUS_OBJS}
-	ar rcs ${NAME} ${BONUS_OBJS}
-	touch .timestamp_flag
+	@ar rcs ${NAME} ${BONUS_OBJS}
+	@touch .timestamp_flag
 
 clean:
-
-	${RM} ${OBJS} ${BONUS_OBJS} 
+	@${RM} ${OBJS} ${BONUS_OBJS} 
 
 fclean: clean
-	${RM} ${NAME}
+	@${RM} ${NAME}
 
 re: fclean all
 

@@ -13,15 +13,20 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/parsing.h"
-
+#include "../../includes/minishell.h"
 
 int	check_for_operations(t_list *data)
 {
-	char *operations[] = {"|", ">", "<", ">>", "<<", NULL};
-	int i;
+	char	*operations[6];
+	int		i;
 
 	i = 0;
+	operations[0] = "|";
+	operations[1] = ">";
+	operations[2] = "<";
+	operations[3] = ">>";
+	operations[4] = "<<";
+	operations[5] = NULL;
 	while (operations[i])
 	{
 		if (ft_strncmp(((t_cmd *)data->content)->component, operations[i],
@@ -34,14 +39,18 @@ int	check_for_operations(t_list *data)
 
 int	check_for_redirections(char *str)
 {
-	char *redirections[] = {">", "<", ">>", "<<", NULL};
-	int i;
+	char	*redirections[5];
+	int		i;
 
+	redirections[0] = ">";
+	redirections[1] = "<";
+	redirections[2] = ">>";
+	redirections[3] = "<<";
+	redirections[4] = NULL;
 	i = 0;
 	while (redirections[i])
 	{
-		if (ft_strncmp(str, redirections[i],
-				0) == 0)
+		if (ft_strncmp(str, redirections[i], 0) == 0)
 			return (i + 2);
 		i++;
 	}
@@ -50,7 +59,7 @@ int	check_for_redirections(char *str)
 
 int	check_for_char(char *content, char ch)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (content[i])

@@ -19,6 +19,9 @@ char	*ft_strdup(const char *s)
 	int		i;
 
 	i = 0;
+	allocated_str = NULL;
+	if (!s)
+		return (NULL);
 	str = (char *)s;
 	allocated_str = (char *)gc_malloc((ft_strlen(str) * sizeof(char)) + 1);
 	if (!allocated_str)

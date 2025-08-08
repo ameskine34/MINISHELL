@@ -2,64 +2,61 @@
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   dup_redirections.c                                 :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: yaithadd <younessaithadou9@gmail.com>      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
+/*                                                    +:+ +:+
+	+:+     */
+/*   By: yaithadd <younessaithadou9@gmail.com>      +#+  +:+
+	+#+        */
+/*                                                +#+#+#+#+#+
+	+#+           */
 /*   Created: 2025/05/27 13:38:24 by yaithadd          #+#    #+#             */
 /*   Updated: 2025/05/27 16:23:00 by yaithadd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/execution.h"
+#include "../includes/minishell.h"
 
-// int	check_for_redirections(char *content)
-// {
-// 	if (ft_strncmp(content, "<", ft_strlen(content)) == 0)
-// 		return (TOKEN_IN_REDIRECTION);
-// 	if (ft_strncmp(content, ">", ft_strlen(content)) == 0)
-// 		return (TOKEN_OUT_REDIRECTION_OVERWRITE);
-// 	if (ft_strncmp(content, ">>", ft_strlen(content)) == 0)
-// 		return (TOKEN_OUT_REDIRECTION_APPEND);
-// 	return (0);
-// }
-
-void	dup_(t_list *data, int type_of_redirection)
+void	dup_(t_list *data, int t_o_r, int is_child, int *ret)
 {
-	int fd;
-	char *content;
-	char *file_name;
+	int		fd;
+	char	*filename;
 
-	content = ((t_cmd *)data->content)->component;
 	if (data->next)
-		file_name = ((t_cmd *)data->next->content)->component;
-	if (type_of_redirection == TOKEN_IN_REDIRECTION)
-	{
-		fd = open(file_name, O_RDONLY);
+		filename = ((t_cmd *)data->next->content)->component;
+	fd = -1;
+	if (t_o_r == TOKEN_IN_REDIRECTION)
+		fd = safe_open(filename, O_RDONLY, is_child);
+	else if (t_o_r == TOKEN_OUT_REDIRECTION_OVERWRITE)
+		fd = safe_open(filename, O_RDWR | O_CREAT | O_TRUNC, is_child);
+	else if (t_o_r == TOKEN_OUT_REDIRECTION_APPEND)
+		fd = safe_open(filename, O_RDWR | O_CREAT | O_APPEND, is_child);
+	else if (t_o_r == TOKEN_HEREDOC)
+		fd = ((t_cmd *)data->content)->heredoc_fd_read;
+	if (fd < 0)
+		return (*ret = 1, (void)0);
+	if (t_o_r == TOKEN_IN_REDIRECTION || t_o_r == TOKEN_HEREDOC)
 		dup2(fd, 0);
-	}
-	else if (type_of_redirection == TOKEN_OUT_REDIRECTION_OVERWRITE)
-	{
-		fd = open(file_name, O_RDWR | O_CREAT | O_TRUNC, 0777);
+	else
 		dup2(fd, 1);
-	}else if (type_of_redirection == TOKEN_OUT_REDIRECTION_APPEND)
-	{
-		fd = open(file_name, O_RDWR | O_CREAT, 0777);
-		dup2(fd, 1);
-	}
+	close(fd);
 }
 
-void dup_redirections(t_list *head)
+int	dup_redirections(t_list *head, int is_child)
 {
-	int type_of_redirection;
+	int	type_of_redirection;
+	int	return_value;
 
 	type_of_redirection = 0;
+	return_value = 0;
 	while (head)
 	{
 		if (((t_cmd *)head->content)->type == TOKEN_PIPE)
 			break ;
-		type_of_redirection = check_for_redirections(((t_cmd *)head->content)->component); 
-		if (type_of_redirection != 0)
-			dup_(head, type_of_redirection);
+		type_of_redirection = ((t_cmd *)head->content)->type;
+		if (type_of_redirection >= 2 && type_of_redirection <= 5)
+			dup_(head, type_of_redirection, is_child, &return_value);
+		if (return_value == -1)
+			break ;
 		head = head->next;
 	}
+	return (return_value);
 }

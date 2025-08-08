@@ -6,11 +6,11 @@
 /*   By: yaithadd <younessaithadou9@gmail.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 14:00:43 by yaithadd          #+#    #+#             */
-/*   Updated: 2025/07/24 17:09:55 by yaithadd         ###   ########.fr       */
+/*   Updated: 2025/08/05 15:00:54 by yaithadd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/parsing.h"
+#include "../includes/minishell.h"
 
 void	skip_ws_f_b(char *str, int *i, int *j)
 {
@@ -29,7 +29,7 @@ int	ambiguous(char *str)
 	int	count;
 
 	count = 0;
-	if (!str || (str && str[0] == '\0'))
+	if (!str)
 		return (-1);
 	j = ft_strlen(str) - 1;
 	i = 0;
@@ -37,10 +37,10 @@ int	ambiguous(char *str)
 	skip_ws_f_b(str, &i, &j);
 	while (i < j)
 	{
-		if (str[i] == '"' || str[i] == '\'' && !inside_quotes)
-			(1) && (inside_quotes = 1), (i++);
-		if (str[i] == '"' || str[i] == '\'' && inside_quotes)
-			(1) && (inside_quotes = 0), (i++);
+		if ((str[i] == '"' || str[i] == '\'') && !inside_quotes)
+			(1) && (inside_quotes = 1, i++);
+		if ((str[i] == '"' || str[i] == '\'') && inside_quotes)
+			(1) && (inside_quotes = 0, i++);
 		if (((str[i] >= 9 && str[i] <= 13) || str[i] == ' ') && !inside_quotes)
 			count++;
 		i++;
