@@ -6,7 +6,7 @@
 /*   By: ameskine <ameskine@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 12:05:03 by ameskine          #+#    #+#             */
-/*   Updated: 2025/08/08 22:32:27 by ameskine         ###   ########.fr       */
+/*   Updated: 2025/08/10 18:14:07 by ameskine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,20 +43,20 @@ static void	print_exported_env(t_list *temp_env)
 		if (((t_env *)temp_env->content)->value)
 		{
 			if (((t_env *)temp_env->content)->value[0] == '\0')
-			{
 				write(1, "=\"\"\n", 4);
-				break ;
+			else 
+			{
+				if (((t_env *)temp_env->content)->value[0] != '\"')
+					write(1, "=\"", 2);
+				else
+					write(1, "=", 1);
+				write(1, ((t_env *)temp_env->content)->value,
+					ft_strlen(((t_env *)temp_env->content)->value));
+				if (((t_env *)temp_env->content)->value[
+						ft_strlen(((t_env *)temp_env->content)->value) - 1] != '"')
+					write(1, "\"", 1);
+				write(1, "\n", 1);
 			}
-			if (((t_env *)temp_env->content)->value[0] != '\"')
-				write(1, "=\"", 2);
-			else
-				write(1, "=", 1);
-			write(1, ((t_env *)temp_env->content)->value,
-				ft_strlen(((t_env *)temp_env->content)->value));
-			if (((t_env *)temp_env->content)->value[
-					ft_strlen(((t_env *)temp_env->content)->value) - 1] != '"')
-				write(1, "\"", 1);
-			write(1, "\n", 1);
 		}
 		temp_env = temp_env->next;
 	}
