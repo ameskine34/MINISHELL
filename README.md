@@ -1,6 +1,6 @@
 📖 About the Project:
 
-Minishell is a project that introduces you to the world of command-line interpreters.
+Minishell is a  project that introduces you to the world of command-line interpreters.
 You will implement your own shell, giving you deeper insight into:
 
 Parsing and tokenizing user input.
