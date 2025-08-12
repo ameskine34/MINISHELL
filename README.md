@@ -25,9 +25,9 @@ Environment variables expansion ($VAR).
 
 Quoting rules:
 
-Single quotes ' prevent variable expansion.
+Single quotes "'" prevent variable expansion.
 
-Double quotes " allow expansion.
+Double quotes '"' allow expansion.
 
 Correct handling of Ctrl-C, Ctrl-D, and Ctrl-\.
 
