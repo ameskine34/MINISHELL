@@ -48,5 +48,7 @@ pwd
 export
 
 unset
+
 env
+
 exit
