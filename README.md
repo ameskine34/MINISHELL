@@ -44,7 +44,9 @@ echo (with -n option)
 cd
 
 pwd
+
 export
+
 unset
 env
 exit
