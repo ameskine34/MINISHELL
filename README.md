@@ -40,7 +40,9 @@ Built-in commands implemented directly in the shell.
 The shell supports the following builtins without using external binaries:
 
 echo (with -n option)
+
 cd
+
 pwd
 export
 unset
